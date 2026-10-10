@@ -58,17 +58,38 @@ console.log(info);
 const layer = info
   .split("\n")
   .map((l) => /^\d+:\s*(\S+)/.exec(l)?.[1])
-  .find((name) => name && /adm2/i.test(name));
+  .find((name) => name && /adm(in)?2$/i.test(name));
 if (!layer) throw new Error("no ADM2 layer found");
 console.log(`ADM2 layer: ${layer}`);
 
+// Field names differ between COD-AB releases (ADM2_TH vs adm2_name1, ...),
+// so read them from the layer instead of assuming.
+const layerInfo = execFileSync("ogrinfo", ["-ro", "-so", src, layer], { encoding: "utf8" });
+const fields = [...layerInfo.matchAll(/^(\w+): \w+/gm)].map((m) => m[1]);
+console.log(`fields: ${fields.join(", ")}`);
+const field = (...patterns) => {
+  for (const p of patterns) {
+    const hit = fields.find((f) => p.test(f));
+    if (hit) return hit;
+  }
+  throw new Error(`no field matching ${patterns.join(" or ")}`);
+};
+const f = {
+  nameTh: field(/^adm2_th$/i, /^adm2_name1$/i),
+  nameEn: field(/^adm2_en$/i, /^adm2_name$/i),
+  pcode: field(/^adm2_pcode$/i),
+  provinceTh: field(/^adm1_th$/i, /^adm1_name1$/i),
+  provincePcode: field(/^adm1_pcode$/i),
+};
+console.log(`using fields: ${JSON.stringify(f)}`);
+
 const out = "public/data/admin-boundary.geojson";
-const where = `ADM1_PCODE IN (${PROVINCES.map((p) => `'${p}'`).join(",")})`;
+const where = `${f.provincePcode} IN (${PROVINCES.map((p) => `'${p}'`).join(",")})`;
 execFileSync(
   "ogr2ogr",
   [
     "-f", "GeoJSON", "-t_srs", "EPSG:4326", "-lco", "COORDINATE_PRECISION=5", "-simplify", "0.0001",
-    "-sql", `SELECT ADM2_TH AS name, ADM2_EN AS name_en, ADM2_PCODE AS pcode, ADM1_TH AS province, ADM1_PCODE AS province_pcode FROM "${layer}" WHERE ${where}`,
+    "-sql", `SELECT ${f.nameTh} AS name, ${f.nameEn} AS name_en, ${f.pcode} AS pcode, ${f.provinceTh} AS province, ${f.provincePcode} AS province_pcode FROM "${layer}" WHERE ${where}`,
     out, src,
   ],
   { stdio: "inherit" },
@@ -76,4 +97,6 @@ execFileSync(
 const fc = JSON.parse(readFileSync(out, "utf8"));
 writeFileSync(out, `${JSON.stringify({ type: "FeatureCollection", features: fc.features })}\n`);
 const provinces = new Set(fc.features.map((f) => f.properties.province));
+if (fc.features.length === 0) throw new Error("no districts matched the province codes");
+console.log(`sample: ${JSON.stringify(fc.features[0].properties)}`);
 console.log(`saved ${out}: ${fc.features.length} districts in ${provinces.size} provinces, ${(readFileSync(out).length / 1e6).toFixed(2)} MB`);
