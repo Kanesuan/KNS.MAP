@@ -1,0 +1,70 @@
+{
+  "request": {
+    "version": "v1.1",
+    "lat": 13.7,
+    "lon": 100.3
+  },
+  "recordedAt": "2026-10-10T16:16:53.543Z",
+  "body": [
+    {
+      "subdistrict_name": "อ้อมน้อย",
+      "district_name": "กระทุ่มแบน",
+      "province_name": "สมุทรสาคร",
+      "total": 1,
+      "detail": [
+        {
+          "year": "2023",
+          "freq": 0
+        },
+        {
+          "year": "2022",
+          "freq": 0
+        },
+        {
+          "year": "2021",
+          "freq": 0
+        },
+        {
+          "year": "2020",
+          "freq": 0
+        },
+        {
+          "year": "2019",
+          "freq": 0
+        },
+        {
+          "year": "2018",
+          "freq": 0
+        },
+        {
+          "year": "2017",
+          "freq": 0
+        },
+        {
+          "year": "2016",
+          "freq": 0
+        },
+        {
+          "year": "2015",
+          "freq": 0
+        },
+        {
+          "year": "2014",
+          "freq": 0
+        },
+        {
+          "year": "2013",
+          "freq": 0
+        },
+        {
+          "year": "2012",
+          "freq": 0
+        },
+        {
+          "year": "2011",
+          "freq": 1
+        }
+      ]
+    }
+  ]
+}

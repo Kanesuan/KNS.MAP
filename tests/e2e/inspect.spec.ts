@@ -15,6 +15,23 @@ const results = (page: Page) =>
     : page.getByTestId("inspect-panel");
 
 test("tapping a point in Bangkok shows a card per layer within 2 seconds", async ({ page }) => {
+  // The GISTDA call is server-side; stand in for /api/inspect with a recorded answer.
+  await page.route("**/api/inspect?**", (route) =>
+    route.fulfill({
+      contentType: "application/json",
+      body: JSON.stringify({
+        ok: true,
+        properties: {
+          subdistrict: "คู้ฝั่งเหนือ",
+          district: "หนองจอก",
+          province: "กรุงเทพมหานคร",
+          floodYears: [2011],
+          firstYear: 2011,
+          lastYear: 2023,
+        },
+      }),
+    }),
+  );
   await tapAt(page, 13.775, 100.535);
   const panel = results(page);
   const zoning = panel.getByTestId("result-bkk-zoning-current");
@@ -27,9 +44,8 @@ test("tapping a point in Bangkok shows a card per layer within 2 seconds", async
   );
   await expect(panel.getByTestId("result-rail-transit")).toContainText("สถานีใกล้ที่สุดคือ");
   await expect(panel).toContainText("ไม่ใช่เอกสารทางกฎหมาย");
-  await expect(panel.getByTestId("result-flood-recurrence")).toHaveAttribute(
-    "data-status",
-    /not_ready|answer|empty/,
+  await expect(panel.getByTestId("result-flood-recurrence")).toContainText(
+    "เคยมีน้ำท่วม 1 ปีในช่วง 2011–2023",
   );
 });
 

@@ -32,7 +32,9 @@ for (const file of files(root)) {
   for (const needle of needles) if (text.includes(needle)) leaks.push(file);
 }
 if (leaks.length) {
-  console.error(`check:secrets: secret found in client bundle:\n  ${[...new Set(leaks)].join("\n  ")}`);
+  console.error(
+    `check:secrets: secret found in client bundle:\n  ${[...new Set(leaks)].join("\n  ")}`,
+  );
   process.exit(1);
 }
 console.log(`check:secrets: no secrets in ${root} (checked ${needles.length} values)`);

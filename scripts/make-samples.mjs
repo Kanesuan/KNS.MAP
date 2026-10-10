@@ -23,11 +23,6 @@ const line = (coords, properties) => ({
   properties,
   geometry: { type: "LineString", coordinates: coords.map(([x, y]) => [round(x), round(y)]) },
 });
-const point = ([x, y], properties) => ({
-  type: "Feature",
-  properties,
-  geometry: { type: "Point", coordinates: [round(x), round(y)] },
-});
 
 // Zoning grid: 6 columns x 5 rows of 0.03 degree cells over central Bangkok.
 const W = 100.46;
@@ -144,31 +139,6 @@ const subsidence = fc([
   poly(rect(100.47, 13.76, 100.57, 13.84), { rateClass: "lt10" }),
 ]);
 
-const lineA = [
-  [100.48, 13.83],
-  [100.52, 13.79],
-  [100.54, 13.76],
-  [100.57, 13.73],
-  [100.62, 13.71],
-];
-const lineB = [
-  [100.47, 13.75],
-  [100.51, 13.752],
-  [100.55, 13.758],
-  [100.6, 13.77],
-  [100.63, 13.8],
-];
-const rail = fc([
-  line(lineA, { kind: "line", line: "sample-a" }),
-  line(lineB, { kind: "line", line: "sample-b" }),
-  ...lineA.map((p, i) =>
-    point(p, { kind: "station", name: `สถานีตัวอย่าง ก${i + 1}`, line: "sample-a" }),
-  ),
-  ...lineB.map((p, i) =>
-    point(p, { kind: "station", name: `สถานีตัวอย่าง ข${i + 1}`, line: "sample-b" }),
-  ),
-]);
-
 const admin = fc([
   poly(rect(100.46, 13.7, 100.55, 13.775), { name: "เขตตัวอย่าง 1", province: "กรุงเทพมหานคร" }),
   poly(rect(100.55, 13.7, 100.64, 13.775), { name: "เขตตัวอย่าง 2", province: "กรุงเทพมหานคร" }),
@@ -181,7 +151,6 @@ const out = {
   "bkk-zoning-draft4.sample.geojson": zoning(DRAFT),
   "bkk-planned-roads.sample.geojson": plannedRoads,
   "subsidence.sample.geojson": subsidence,
-  "rail-transit.sample.geojson": rail,
   "admin-boundary.sample.geojson": admin,
 };
 for (const [name, data] of Object.entries(out)) {

@@ -49,3 +49,30 @@ export function describeAdmin(props: Props): string | null {
   if (!name) return null;
   return format("describe.admin", { name, province: str(props.province) ?? "" }).trim();
 }
+
+/** Expects the FloodRecurrence object returned by /api/inspect. */
+export function describeFloodRecurrence(props: Props): string | null {
+  const years = Array.isArray(props.floodYears)
+    ? props.floodYears.filter((y): y is number => typeof y === "number")
+    : null;
+  const from = num(props.firstYear);
+  const to = num(props.lastYear);
+  if (!years || from === null || to === null) return null;
+  const history =
+    years.length > 0
+      ? format("describe.floodYes", { count: years.length, from, to, years: years.join(", ") })
+      : format("describe.floodNo", { from, to });
+  const subdistrict = str(props.subdistrict);
+  const district = str(props.district);
+  const province = str(props.province);
+  if (!subdistrict || !district || !province) return history;
+  const place = format(
+    province === "กรุงเทพมหานคร" ? "describe.floodPlaceBkk" : "describe.floodPlace",
+    {
+      subdistrict,
+      district,
+      province,
+    },
+  );
+  return `${history} · ${place}`;
+}
