@@ -1,5 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
-import { openMap } from "./helpers";
+import { isMobileLayout, openMap } from "./helpers";
 
 /** Opens the map centred on a point and taps the centre of the map. */
 async function tapAt(page: Page, lat: number, lng: number) {
@@ -10,9 +10,7 @@ async function tapAt(page: Page, lat: number, lng: number) {
 }
 
 const results = (page: Page) =>
-  test.info().project.name === "mobile"
-    ? page.getByTestId("inspect-sheet")
-    : page.getByTestId("inspect-panel");
+  isMobileLayout(page) ? page.getByTestId("inspect-sheet") : page.getByTestId("inspect-panel");
 
 test("tapping a point in Bangkok shows a card per layer within 2 seconds", async ({ page }) => {
   // The GISTDA call is server-side; stand in for /api/inspect with a recorded answer.
@@ -79,7 +77,7 @@ test("the panel closes", async ({ page }) => {
   await tapAt(page, 13.775, 100.535);
   const panel = results(page);
   await expect(panel).toBeVisible();
-  if (test.info().project.name === "mobile") {
+  if (isMobileLayout(page)) {
     await panel.getByRole("button", { name: "ปิด", exact: true }).click();
   } else {
     await page.getByRole("button", { name: "ปิดผลของจุด" }).click();

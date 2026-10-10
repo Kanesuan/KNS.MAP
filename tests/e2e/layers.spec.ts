@@ -1,10 +1,10 @@
 import { expect, test, type Page } from "@playwright/test";
-import { openMap } from "./helpers";
+import { isMobileLayout, openMap } from "./helpers";
 
 const layersInUrl = (page: Page) => new URL(page.url()).searchParams.get("l");
 
 async function openPanel(page: Page) {
-  if (test.info().project.name === "mobile") {
+  if (isMobileLayout(page)) {
     await page.getByRole("button", { name: "เปิดแผงชั้นข้อมูล" }).click();
     await expect(page.getByTestId("layer-sheet")).toBeVisible();
   }
@@ -101,7 +101,7 @@ test("a failed load shows an error with a working retry", async ({ page }) => {
 });
 
 test("the panel works with the keyboard only", async ({ page }) => {
-  test.skip(test.info().project.name === "mobile", "keyboard path is checked on desktop");
+  test.skip(isMobileLayout(page), "keyboard path is checked on desktop");
   await openMap(page);
   await subsidenceSwitch(page).focus();
   await page.keyboard.press("Space");
@@ -118,7 +118,7 @@ test("the panel works with the keyboard only", async ({ page }) => {
 });
 
 test("mobile sheet drags up, closes, and leaves the map controls clear", async ({ page }) => {
-  test.skip(test.info().project.name !== "mobile", "mobile only");
+  test.skip(!isMobileLayout(page), "mobile only");
   await openMap(page);
   await openPanel(page);
   const sheet = page.getByTestId("layer-sheet");
@@ -146,7 +146,9 @@ test("mobile sheet drags up, closes, and leaves the map controls clear", async (
   if (!hb2) throw new Error("no handle");
   await page.mouse.move(hb2.x + hb2.width / 2, hb2.y + hb2.height / 2);
   await page.mouse.down();
-  await page.mouse.move(hb2.x + hb2.width / 2, 630, { steps: 10 });
+  await page.mouse.move(hb2.x + hb2.width / 2, (page.viewportSize()?.height ?? 640) - 10, {
+    steps: 10,
+  });
   await page.mouse.up();
   await expect(sheet).toBeHidden();
   await expect(page.getByRole("button", { name: "เปิดแผงชั้นข้อมูล" })).toBeVisible();

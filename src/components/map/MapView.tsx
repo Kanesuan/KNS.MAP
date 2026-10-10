@@ -5,20 +5,15 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { th } from "@/i18n/th";
 import { basemapStyleUrl, loadBasemapStyle } from "@/lib/basemap";
-import { LAYERS } from "@/layers/registry";
 import { MAX_BOUNDS, MAX_ZOOM, MIN_ZOOM, REGION_BOUNDS } from "@/lib/region";
 import { replaceSearch } from "@/lib/url";
 import { parseViewState, serializeViewState } from "@/lib/url-state";
 import { useInspectStore } from "@/store/inspect-store";
 import { useLayerStore } from "@/store/layer-store";
 import { useMapStore } from "@/store/map-store";
+import { Attribution } from "./Attribution";
 import { MapControls } from "./MapControls";
 import { MapLayers } from "./MapLayers";
-
-// Credit every live data source on the map, as their licences require.
-const ATTRIBUTION = [
-  ...new Set(LAYERS.filter((l) => l.status === "live").map((l) => l.attribution.org)),
-];
 
 setWorkerUrl(`/vendor/maplibre/maplibre-gl-worker.mjs?v=${getVersion()}`);
 
@@ -53,8 +48,14 @@ export function MapView() {
           minZoom: MIN_ZOOM,
           maxZoom: MAX_ZOOM,
           maxBounds: MAX_BOUNDS,
-          attributionControl: { compact: true, customAttribution: ATTRIBUTION },
+          attributionControl: false,
+          validateStyle: false,
           dragRotate: false,
+          // No label fade-in: fewer repaints while the first tiles arrive.
+          fadeDuration: 0,
+          // Cap the render resolution on very dense screens; past 2 the extra pixels
+          // cost GPU time without a visible gain on a map.
+          pixelRatio: Math.min(window.devicePixelRatio || 1, 2),
           pitchWithRotate: false,
         });
         instance = m;
@@ -127,6 +128,7 @@ export function MapView() {
         aria-label={th.app.map}
         className="fixed inset-0 h-dvh w-screen bg-neutral-200"
       />
+      <Attribution />
       {map && <MapControls map={map} />}
       {map && styleLoaded && layersReady && <MapLayers map={map} />}
       {failed && (

@@ -78,7 +78,22 @@ Sources, licences and status: [docs/DATA_SOURCES.md](docs/DATA_SOURCES.md).
 through one `track()` function; the default sink logs to the console. Swap it with
 `setAnalyticsSink()`.
 
-## Hosting
+## Deploy (Vercel, Hobby plan is free)
 
-Vercel with a preview per PR. Connect this GitHub repo in the Vercel dashboard;
-CI runs on GitHub Actions (`.github/workflows/ci.yml`).
+1. Sign in at https://vercel.com with GitHub, **Add New → Project**, import `Kanesuan/KNS.MAP`.
+2. Framework preset: Next.js (detected). No build settings to change.
+3. **Settings → Environment Variables**:
+   - `GISTDA_API_KEY`: the GISTDA key (server-side only, never `NEXT_PUBLIC_`).
+   - `NEXT_PUBLIC_BASEMAP_STYLE_URL`: optional, defaults to OpenFreeMap Liberty.
+4. Deploy. Every PR then gets its own preview URL.
+
+The Hobby plan is for non-commercial use; a commercial launch needs Vercel Pro or another
+Next.js host (docs/BRIEF.md section 9).
+
+## Acceptance checks on the deployed URL
+
+- `npm run audit:lighthouse -- https://<your-domain>` runs Lighthouse three times on the
+  mobile profile and checks the brief's targets (Performance ≥ 80, Accessibility ≥ 90).
+- In the build sandbox (no GPU, basemap fonts blocked) the lab score is about 70 for
+  Performance and 100 for Accessibility; most of the remaining blocking time is WebGL
+  drawn in software, so measure on the real URL.
