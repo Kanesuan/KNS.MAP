@@ -1,0 +1,11 @@
+{
+  "request": {
+    "version": "v1.1",
+    "lat": 13.7563,
+    "lon": 100.5018
+  },
+  "recordedAt": "2026-10-10T16:15:46.938Z",
+  "body": {
+    "result": "not found"
+  }
+}
