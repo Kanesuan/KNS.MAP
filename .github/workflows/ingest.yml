@@ -41,6 +41,11 @@ jobs:
           if [ "$(node -p "require('./scripts/ingest/requests.json').hdxAdmin")" != "true" ]; then echo "skipped"; exit 0; fi
           sudo apt-get update -qq && sudo apt-get install -y -qq gdal-bin > /dev/null
           node scripts/ingest/hdx-admin.mjs
+      - name: Discover sources
+        run: |
+          urls=$(node -p "(require('./scripts/ingest/requests.json').discover || []).join(' ')")
+          if [ -z "$urls" ]; then echo "skipped"; exit 0; fi
+          node scripts/ingest/discover.mjs $urls
       - name: Commit outputs
         run: |
           git config user.name "github-actions[bot]"
