@@ -31,7 +31,7 @@ jobs:
         run: |
           if [ "$(node -p "require('./scripts/ingest/requests.json').gistdaFixture")" != "true" ]; then echo "skipped"; exit 0; fi
           if [ -z "$GISTDA_API_KEY" ]; then echo "::warning::GISTDA_API_KEY secret is not set; skipped"; exit 0; fi
-          node scripts/ingest/record-gistda-fixture.mjs 13.7563 100.5018 || echo "::warning::GISTDA call failed"
+          node scripts/ingest/record-gistda-fixture.mjs || echo "::warning::GISTDA call failed"
       - name: OpenStreetMap rail
         run: |
           if [ "$(node -p "require('./scripts/ingest/requests.json').osmRail")" != "true" ]; then echo "skipped"; exit 0; fi

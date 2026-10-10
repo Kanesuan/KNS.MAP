@@ -16,7 +16,7 @@ out tags geom;
   node["public_transport"="station"]["subway"="yes"](${BBOX});
   node["public_transport"="station"]["monorail"="yes"](${BBOX});
 );
-out tags;`;
+out body;`;
 
 // Public Overpass instances time out under load, so retry and fall back.
 const ENDPOINTS = process.env.OVERPASS_URL
@@ -62,7 +62,7 @@ for (const el of elements) {
       properties: { kind: "line", line: tags.line ?? tags.name ?? null, railway: tags.railway, osmId: `w${el.id}` },
       geometry: { type: "LineString", coordinates: el.geometry.map((g) => [round(g.lon), round(g.lat)]) },
     });
-  } else if (el.type === "node" && name && !seenStations.has(el.id)) {
+  } else if (el.type === "node" && name && Number.isFinite(el.lat) && Number.isFinite(el.lon) && !seenStations.has(el.id)) {
     seenStations.add(el.id);
     features.push({
       type: "Feature",
