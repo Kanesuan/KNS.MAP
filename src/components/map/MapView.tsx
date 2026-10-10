@@ -5,6 +5,7 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { th } from "@/i18n/th";
 import { basemapStyleUrl, loadBasemapStyle } from "@/lib/basemap";
+import { LAYERS } from "@/layers/registry";
 import { MAX_BOUNDS, MAX_ZOOM, MIN_ZOOM, REGION_BOUNDS } from "@/lib/region";
 import { replaceSearch } from "@/lib/url";
 import { parseViewState, serializeViewState } from "@/lib/url-state";
@@ -13,6 +14,11 @@ import { useLayerStore } from "@/store/layer-store";
 import { useMapStore } from "@/store/map-store";
 import { MapControls } from "./MapControls";
 import { MapLayers } from "./MapLayers";
+
+// Credit every live data source on the map, as their licences require.
+const ATTRIBUTION = [
+  ...new Set(LAYERS.filter((l) => l.status === "live").map((l) => l.attribution.org)),
+];
 
 setWorkerUrl(`/vendor/maplibre/maplibre-gl-worker.mjs?v=${getVersion()}`);
 
@@ -47,7 +53,7 @@ export function MapView() {
           minZoom: MIN_ZOOM,
           maxZoom: MAX_ZOOM,
           maxBounds: MAX_BOUNDS,
-          attributionControl: { compact: true, customAttribution: "© OpenStreetMap contributors" },
+          attributionControl: { compact: true, customAttribution: ATTRIBUTION },
           dragRotate: false,
           pitchWithRotate: false,
         });

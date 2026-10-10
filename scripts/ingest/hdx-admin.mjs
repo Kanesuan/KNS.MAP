@@ -16,7 +16,9 @@ if (!pkgRes.ok) throw new Error(`HDX package_show HTTP ${pkgRes.status}`);
 const pkg = (await pkgRes.json()).result;
 console.log(`dataset: ${pkg.title}`);
 console.log(`licence: ${pkg.license_title}`);
-console.log(`source: ${pkg.dataset_source} | updated: ${pkg.last_modified} | dataset date: ${pkg.dataset_date}`);
+console.log(
+  `source: ${pkg.dataset_source} | updated: ${pkg.last_modified} | dataset date: ${pkg.dataset_date}`,
+);
 for (const r of pkg.resources) console.log(`resource: ${r.name} | ${r.format} | ${r.url}`);
 mkdirSync("tests/fixtures", { recursive: true });
 writeFileSync(
@@ -42,7 +44,9 @@ if (!EXPECTED_LICENCE.test(pkg.license_title ?? "")) {
 
 // Prefer a shapefile or GeoJSON bundle; geodatabases need extra drivers.
 const pick =
-  pkg.resources.find((r) => /shp|shapefile/i.test(`${r.format} ${r.name}`) && /zip$/i.test(r.url)) ??
+  pkg.resources.find(
+    (r) => /shp|shapefile/i.test(`${r.format} ${r.name}`) && /zip$/i.test(r.url),
+  ) ??
   pkg.resources.find((r) => /geojson/i.test(`${r.format} ${r.name}`)) ??
   pkg.resources.find((r) => /zip$/i.test(r.url));
 if (!pick) throw new Error("no usable resource");
@@ -88,9 +92,18 @@ const where = `${f.provincePcode} IN (${PROVINCES.map((p) => `'${p}'`).join(",")
 execFileSync(
   "ogr2ogr",
   [
-    "-f", "GeoJSON", "-t_srs", "EPSG:4326", "-lco", "COORDINATE_PRECISION=5", "-simplify", "0.0001",
-    "-sql", `SELECT ${f.nameTh} AS name, ${f.nameEn} AS name_en, ${f.pcode} AS pcode, ${f.provinceTh} AS province, ${f.provincePcode} AS province_pcode FROM "${layer}" WHERE ${where}`,
-    out, src,
+    "-f",
+    "GeoJSON",
+    "-t_srs",
+    "EPSG:4326",
+    "-lco",
+    "COORDINATE_PRECISION=5",
+    "-simplify",
+    "0.0001",
+    "-sql",
+    `SELECT ${f.nameTh} AS name, ${f.nameEn} AS name_en, ${f.pcode} AS pcode, ${f.provinceTh} AS province, ${f.provincePcode} AS province_pcode FROM "${layer}" WHERE ${where}`,
+    out,
+    src,
   ],
   { stdio: "inherit" },
 );
@@ -99,4 +112,6 @@ writeFileSync(out, `${JSON.stringify({ type: "FeatureCollection", features: fc.f
 const provinces = new Set(fc.features.map((f) => f.properties.province));
 if (fc.features.length === 0) throw new Error("no districts matched the province codes");
 console.log(`sample: ${JSON.stringify(fc.features[0].properties)}`);
-console.log(`saved ${out}: ${fc.features.length} districts in ${provinces.size} provinces, ${(readFileSync(out).length / 1e6).toFixed(2)} MB`);
+console.log(
+  `saved ${out}: ${fc.features.length} districts in ${provinces.size} provinces, ${(readFileSync(out).length / 1e6).toFixed(2)} MB`,
+);

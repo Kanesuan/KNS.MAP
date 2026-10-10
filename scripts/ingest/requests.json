@@ -2,5 +2,5 @@
   "run": 5,
   "gistdaFixture": false,
   "osmRail": false,
-  "hdxAdmin": true
+  "hdxAdmin": false
 }
