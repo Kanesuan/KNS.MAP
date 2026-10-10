@@ -23,3 +23,8 @@ export function viewFromUrl(page: Page): { lat: number; lng: number; zoom: numbe
   const [lat, lng] = (params.get("c") ?? "").split(",").map(Number);
   return { lat: lat ?? NaN, lng: lng ?? NaN, zoom: Number(params.get("z")) };
 }
+
+/** True when the app uses its mobile layout (768px wide or less, as in the brief). */
+export function isMobileLayout(page: Page): boolean {
+  return (page.viewportSize()?.width ?? 0) <= 768;
+}

@@ -69,7 +69,7 @@ export function MapControls({ map }: { map: MaplibreMap }) {
   return (
     // Sit above the mobile bottom sheet; hide when the sheet leaves no room.
     <div
-      className="fixed right-3 bottom-8 z-40 flex flex-col items-end gap-2 transition-[bottom] duration-200"
+      className="fixed right-3 bottom-14 z-40 flex flex-col items-end gap-2 transition-[bottom] duration-200"
       style={sheetHeight ? { bottom: sheetHeight + 12 } : undefined}
       hidden={
         sheetHeight > 0 && typeof window !== "undefined" && sheetHeight > window.innerHeight - 180

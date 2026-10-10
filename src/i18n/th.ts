@@ -6,6 +6,7 @@ export const th = {
     map: "แผนที่",
     mapLoadFailed: "โหลดแผนที่ไม่สำเร็จ",
     retry: "ลองใหม่",
+    attribution: "ที่มาของแผนที่และข้อมูล",
   },
   controls: {
     zoomIn: "ซูมเข้า",
