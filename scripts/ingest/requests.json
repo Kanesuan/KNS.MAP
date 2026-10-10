@@ -1,13 +1,8 @@
 {
-  "run": 6,
+  "run": 7,
   "gistdaFixture": false,
   "osmRail": false,
   "hdxAdmin": false,
-  "discover": [
-    "http://3d-cpd.bangkok.go.th/ArcGIS/rest/services/DOL/LupDolWms/MapServer?f=json",
-    "http://3d-cpd.bangkok.go.th/ArcGIS/rest/services/DOL/LupDolWms/MapServer/1?f=json",
-    "http://3d-cpd.bangkok.go.th/ArcGIS/rest/services/DOL/LupDolWms/MapServer/0?f=json",
-    "http://3d-cpd.bangkok.go.th/ArcGIS/rest/services?f=json",
-    "https://cityplangis.bangkok.go.th/cpdPortal/index.php/map-download/"
-  ]
+  "bmaPlan": true,
+  "discover": []
 }

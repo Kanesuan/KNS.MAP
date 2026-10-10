@@ -41,6 +41,11 @@ jobs:
           if [ "$(node -p "require('./scripts/ingest/requests.json').hdxAdmin")" != "true" ]; then echo "skipped"; exit 0; fi
           sudo apt-get update -qq && sudo apt-get install -y -qq gdal-bin > /dev/null
           node scripts/ingest/hdx-admin.mjs
+      - name: BMA city plan (zoning and planned roads)
+        run: |
+          if [ "$(node -p "require('./scripts/ingest/requests.json').bmaPlan")" != "true" ]; then echo "skipped"; exit 0; fi
+          node scripts/ingest/arcgis-legacy.mjs bkk-zoning
+          node scripts/ingest/arcgis-legacy.mjs bkk-roads
       - name: Discover sources
         run: |
           urls=$(node -p "(require('./scripts/ingest/requests.json').discover || []).join(' ')")
