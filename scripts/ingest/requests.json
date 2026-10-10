@@ -3,6 +3,6 @@
   "gistdaFixture": false,
   "osmRail": false,
   "hdxAdmin": false,
-  "bmaPlan": true,
+  "bmaPlan": false,
   "discover": []
 }

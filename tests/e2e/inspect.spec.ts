@@ -30,11 +30,12 @@ test("tapping a point in Bangkok shows a card per layer within 2 seconds", async
       }),
     }),
   );
-  await tapAt(page, 13.775, 100.535);
+  await tapAt(page, 13.7466, 100.5348);
   const panel = results(page);
   const zoning = panel.getByTestId("result-bkk-zoning-current");
-  await expect(zoning).toContainText("ที่ดินประเภทพาณิชยกรรม", { timeout: 2_000 });
-  await expect(zoning).toContainText("ข้อมูลตัวอย่าง");
+  await expect(zoning).toContainText("ที่ดินประเภทพาณิชยกรรม (พ.5)", { timeout: 2_000 });
+  await expect(zoning).not.toContainText("ข้อมูลตัวอย่าง");
+  await expect(panel.getByTestId("result-bkk-zoning-draft4")).toContainText("ข้อมูลตัวอย่าง");
   await expect(panel.locator('[data-testid^="result-"]')).toHaveCount(7);
   await expect(panel.locator('[data-testid^="result-"]').first()).toHaveAttribute(
     "data-testid",
@@ -54,7 +55,7 @@ test("a point without data says so", async ({ page }) => {
 });
 
 test("'show on map' turns the layer on", async ({ page }) => {
-  await tapAt(page, 13.775, 100.535);
+  await tapAt(page, 13.7466, 100.5348);
   const card = results(page).getByTestId("result-subsidence");
   await card.getByRole("button", { name: "ดูบนแผนที่" }).click();
   await expect(card.getByRole("button", { name: "แสดงบนแผนที่อยู่" })).toBeDisabled();
@@ -65,7 +66,7 @@ test("an external API failure only breaks its own card", async ({ page }) => {
   await page.route("**/api/inspect?**", (route) =>
     route.fulfill({ status: 502, body: "bad gateway" }),
   );
-  await tapAt(page, 13.775, 100.535);
+  await tapAt(page, 13.7466, 100.5348);
   const panel = results(page);
   await expect(panel.getByTestId("result-flood-recurrence")).toContainText("โหลดไม่สำเร็จ");
   await expect(panel.getByTestId("result-bkk-zoning-current")).toContainText(
@@ -74,7 +75,7 @@ test("an external API failure only breaks its own card", async ({ page }) => {
 });
 
 test("the panel closes", async ({ page }) => {
-  await tapAt(page, 13.775, 100.535);
+  await tapAt(page, 13.7466, 100.5348);
   const panel = results(page);
   await expect(panel).toBeVisible();
   if (isMobileLayout(page)) {

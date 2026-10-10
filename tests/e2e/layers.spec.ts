@@ -11,7 +11,7 @@ async function openPanel(page: Page) {
 }
 
 const zoningSwitch = (page: Page) =>
-  page.getByRole("switch", { name: "ผังเมืองรวม กทม. ที่บังคับใช้" });
+  page.getByRole("switch", { name: "ผังเมืองรวม กทม. พ.ศ. 2556" });
 const draftSwitch = (page: Page) =>
   page.getByRole("switch", { name: "ร่างผังเมืองรวม กทม. ปรับปรุงครั้งที่ 4" });
 const subsidenceSwitch = (page: Page) => page.getByRole("switch", { name: "แผ่นดินทรุด" });
@@ -61,7 +61,7 @@ test("sample layers are labelled and every layer has a '?' with source and date"
   const rows = page.locator('[data-testid^="layer-row-"]');
   await expect(rows).toHaveCount(7);
   await expect(page.getByTestId("layer-row-rail-transit")).not.toContainText("ข้อมูลตัวอย่าง");
-  await expect(page.getByTestId("layer-row-bkk-zoning-current")).toContainText("ข้อมูลตัวอย่าง");
+  await expect(page.getByTestId("layer-row-bkk-zoning-draft4")).toContainText("ข้อมูลตัวอย่าง");
   for (const row of await rows.all()) {
     const info = row.getByRole("button", { name: /^อ่านเพิ่มเติมเกี่ยวกับ/ });
     await expect(info).toHaveAttribute("aria-expanded", "false");

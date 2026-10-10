@@ -18,11 +18,6 @@ const poly = (coords, properties) => ({
   properties,
   geometry: { type: "Polygon", coordinates: coords },
 });
-const line = (coords, properties) => ({
-  type: "Feature",
-  properties,
-  geometry: { type: "LineString", coordinates: coords.map(([x, y]) => [round(x), round(y)]) },
-});
 
 // Zoning grid: 6 columns x 5 rows of 0.03 degree cells over central Bangkok.
 const W = 100.46;
@@ -103,34 +98,6 @@ const zoning = (grid) =>
     ),
   );
 
-const plannedRoads = fc([
-  line(
-    [
-      [100.47, 13.745],
-      [100.53, 13.748],
-      [100.6, 13.752],
-      [100.635, 13.755],
-    ],
-    { code: "ก1", widthM: 16 },
-  ),
-  line(
-    [
-      [100.55, 13.705],
-      [100.552, 13.76],
-      [100.548, 13.84],
-    ],
-    { code: "ข2", widthM: 20 },
-  ),
-  line(
-    [
-      [100.49, 13.82],
-      [100.56, 13.805],
-      [100.62, 13.79],
-    ],
-    { code: "ค3", widthM: 30 },
-  ),
-]);
-
 const subsidence = fc([
   poly(rect(100.47, 13.71, 100.52, 13.76), { rateClass: "lt10" }),
   poly(rect(100.52, 13.71, 100.57, 13.76), { rateClass: "10to20" }),
@@ -140,9 +107,7 @@ const subsidence = fc([
 ]);
 
 const out = {
-  "bkk-zoning-current.sample.geojson": zoning(CURRENT),
   "bkk-zoning-draft4.sample.geojson": zoning(DRAFT),
-  "bkk-planned-roads.sample.geojson": plannedRoads,
   "subsidence.sample.geojson": subsidence,
 };
 for (const [name, data] of Object.entries(out)) {

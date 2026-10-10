@@ -1,7 +1,6 @@
 // Fails (exit 1) when the layer registry is invalid, including any "live"
 // layer whose licence is not confirmed for commercial use. Runs before build.
 import { PROJECT_USE } from "../src/layers/project";
-import { PROJECT_USE } from "../src/layers/project";
 import { LAYERS } from "../src/layers/registry";
 import { validateRegistry } from "../src/layers/validate";
 
