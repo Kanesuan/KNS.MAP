@@ -90,10 +90,11 @@ const { objectIds } = await get(`${layerUrl}/query`, { where: "1=1", returnIdsOn
 console.log(`${objectIds.length} features`);
 
 // Esri: outer rings clockwise, holes counter-clockwise.
-const signedArea = (ring) => ring.reduce((s, [x1, y1], i) => {
-  const [x2, y2] = ring[(i + 1) % ring.length];
-  return s + (x2 - x1) * (y2 + y1);
-}, 0);
+const signedArea = (ring) =>
+  ring.reduce((s, [x1, y1], i) => {
+    const [x2, y2] = ring[(i + 1) % ring.length];
+    return s + (x2 - x1) * (y2 + y1);
+  }, 0);
 const inRing = ([x, y], ring) => {
   let inside = false;
   for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
@@ -156,6 +157,8 @@ for (const f of features) {
   const k = f.properties.category ?? f.properties.code;
   counts[k] = (counts[k] ?? 0) + 1;
 }
-console.log(`saved ${job.out}: ${features.length} features (${skipped} skipped), ${(json.length / 1e6).toFixed(2)} MB`);
+console.log(
+  `saved ${job.out}: ${features.length} features (${skipped} skipped), ${(json.length / 1e6).toFixed(2)} MB`,
+);
 console.log(JSON.stringify(counts));
 console.log(`sample: ${JSON.stringify(features[0]?.properties)}`);

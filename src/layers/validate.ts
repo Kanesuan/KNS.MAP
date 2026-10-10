@@ -1,10 +1,14 @@
 import { hasMessage } from "@/i18n/th";
+import { PROJECT_USE } from "./project";
 import { LAYER_GROUPS, type LayerConfig } from "./types";
 
 const DATE = /^\d{4}-\d{2}-\d{2}$/;
 
 /** Returns human-readable problems with the registry. Empty means valid. */
-export function validateRegistry(layers: readonly LayerConfig[]): string[] {
+export function validateRegistry(
+  layers: readonly LayerConfig[],
+  use: typeof PROJECT_USE = PROJECT_USE,
+): string[] {
   const errors: string[] = [];
   const ids = new Set<string>();
 
@@ -28,8 +32,11 @@ export function validateRegistry(layers: readonly LayerConfig[]): string[] {
     if (!DATE.test(a.dataDate) || Number.isNaN(Date.parse(a.dataDate))) {
       errors.push(`${at}: attribution.dataDate must be YYYY-MM-DD`);
     }
-    if (layer.status === "live" && a.commercialUse !== "yes") {
+    if (layer.status === "live" && use === "commercial" && a.commercialUse !== "yes") {
       errors.push(`${at}: status is "live" but commercialUse is "${a.commercialUse}", not "yes"`);
+    }
+    if (layer.status === "live" && use === "non-commercial" && a.commercialUse === "unverified") {
+      errors.push(`${at}: status is "live" but its licence is "unverified"`);
     }
 
     const src = layer.source;
