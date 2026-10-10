@@ -1,5 +1,6 @@
 {
-  "run": 3,
+  "run": 4,
   "gistdaFixture": false,
-  "osmRail": false
+  "osmRail": false,
+  "hdxAdmin": true
 }
