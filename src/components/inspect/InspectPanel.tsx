@@ -47,7 +47,7 @@ function Results() {
       <p className="mb-3 text-base text-neutral-600 tabular-nums md:text-sm">
         {point.lat.toFixed(5)}, {point.lng.toFixed(5)}
       </p>
-      <ul className="space-y-3" data-testid="inspect-results">
+      <ul className="divide-y divide-neutral-100" data-testid="inspect-results">
         {ordered.map((layer) => (
           <ResultCard
             key={layer.id}
@@ -59,7 +59,7 @@ function Results() {
           />
         ))}
       </ul>
-      <p className="mt-4 rounded-lg bg-neutral-100 p-3 text-base leading-relaxed text-neutral-700 md:text-sm">
+      <p className="mt-3 text-base leading-relaxed text-neutral-500 md:text-xs">
         {t("inspect.disclaimer")}
       </p>
     </>

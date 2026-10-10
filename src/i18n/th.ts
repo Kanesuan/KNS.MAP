@@ -51,6 +51,8 @@ export const th = {
     retry: "ลองใหม่",
     tapOnly: "ชั้นนี้ไม่แสดงบนแผนที่ แตะที่แผนที่เพื่อดูข้อมูลของจุดนั้น",
     exclusive: "เปิดได้ทีละชั้นกับ",
+    moreInfo: "อ่านเพิ่มเติมเกี่ยวกับ",
+    license: "สิทธิ์ใช้งาน",
   },
   layers: {
     "bkk-zoning-current": {

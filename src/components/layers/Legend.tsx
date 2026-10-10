@@ -26,7 +26,7 @@ function Swatch({ color, shape = "fill" }: { color: string; shape?: "fill" | "li
 export function Legend({ items }: { items: LayerConfig["legend"] }) {
   if (items.length === 0) return null;
   return (
-    <ul aria-label={t("panel.legend")} className="space-y-1.5">
+    <ul aria-label={t("panel.legend")} className="grid grid-cols-1 gap-x-3 gap-y-1">
       {items.map((item) => (
         <li key={item.label} className="flex items-center gap-2 text-base md:text-sm leading-snug">
           <Swatch color={item.color} shape={item.shape} />

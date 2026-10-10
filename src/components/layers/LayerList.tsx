@@ -15,7 +15,7 @@ export function LayerList() {
   const retry = useLayerStore((s) => s.retry);
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       {LAYER_GROUPS.map((group) => {
         const layers = LAYERS.filter((l) => l.group === group);
         if (layers.length === 0) return null;
@@ -23,7 +23,7 @@ export function LayerList() {
           <section key={group} aria-labelledby={`group-${group}`}>
             <h3
               id={`group-${group}`}
-              className="text-base md:text-sm font-semibold tracking-wide text-neutral-500"
+              className="pt-1 text-base font-medium text-neutral-400 md:text-xs"
             >
               {t(`panel.groups.${group}`)}
             </h3>
