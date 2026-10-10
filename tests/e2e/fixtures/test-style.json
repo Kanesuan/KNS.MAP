@@ -1,0 +1,72 @@
+{
+  "version": 8,
+  "name": "e2e test basemap",
+  "glyphs": "https://basemap.test/fonts/{fontstack}/{range}.pbf",
+  "sources": {
+    "places": {
+      "type": "geojson",
+      "data": {
+        "type": "FeatureCollection",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": { "name": "กรุงเทพมหานคร" },
+            "geometry": { "type": "Point", "coordinates": [100.5018, 13.7563] }
+          },
+          {
+            "type": "Feature",
+            "properties": { "name": "นนทบุรี" },
+            "geometry": { "type": "Point", "coordinates": [100.5144, 13.8621] }
+          },
+          {
+            "type": "Feature",
+            "properties": { "name": "ปทุมธานี" },
+            "geometry": { "type": "Point", "coordinates": [100.525, 14.0208] }
+          },
+          {
+            "type": "Feature",
+            "properties": { "name": "สมุทรปราการ" },
+            "geometry": { "type": "Point", "coordinates": [100.5968, 13.5991] }
+          },
+          {
+            "type": "Feature",
+            "properties": { "name": "นครปฐม" },
+            "geometry": { "type": "Point", "coordinates": [100.0651, 13.8199] }
+          },
+          {
+            "type": "Feature",
+            "properties": { "name": "สมุทรสาคร" },
+            "geometry": { "type": "Point", "coordinates": [100.274, 13.5475] }
+          },
+          {
+            "type": "Feature",
+            "properties": { "name": "ถนนสุขุมวิท ซอยทองหล่อ" },
+            "geometry": { "type": "Point", "coordinates": [100.58, 13.73] }
+          }
+        ]
+      }
+    }
+  },
+  "layers": [
+    { "id": "background", "type": "background", "paint": { "background-color": "#f2efe9" } },
+    {
+      "id": "dots",
+      "type": "circle",
+      "source": "places",
+      "paint": { "circle-radius": 4, "circle-color": "#444" }
+    },
+    {
+      "id": "labels",
+      "type": "symbol",
+      "source": "places",
+      "layout": {
+        "text-field": ["get", "name"],
+        "text-font": ["Noto Sans Regular"],
+        "text-size": 18,
+        "text-offset": [0, 1.2],
+        "text-anchor": "top"
+      },
+      "paint": { "text-color": "#222", "text-halo-color": "#fff", "text-halo-width": 1.5 }
+    }
+  ]
+}
