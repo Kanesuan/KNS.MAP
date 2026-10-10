@@ -8,7 +8,7 @@ for (const url of process.argv.slice(2)) {
     const text = /json|html|xml|text/.test(type)
       ? await res.text()
       : `[${type}, ${(await res.arrayBuffer()).byteLength} bytes]`;
-    console.log(`\n===== ${url}\nHTTP ${res.status} ${type}\n${text.slice(0, 6000)}`);
+    console.log(`\n===== ${url}\nHTTP ${res.status} ${type}\n${text.slice(0, 1500)}`);
   } catch (err) {
     console.log(`\n===== ${url}\nERROR ${err.message}`);
   }
