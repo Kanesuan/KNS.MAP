@@ -18,17 +18,37 @@ out tags geom;
 );
 out tags;`;
 
-const ENDPOINT = process.env.OVERPASS_URL ?? "https://overpass-api.de/api/interpreter";
-const res = await fetch(ENDPOINT, {
-  method: "POST",
-  headers: { "Content-Type": "application/x-www-form-urlencoded", "User-Agent": "land-map ingest" },
-  body: new URLSearchParams({ data: QUERY }),
-});
-if (!res.ok) {
-  console.error(`Overpass HTTP ${res.status}`);
+// Public Overpass instances time out under load, so retry and fall back.
+const ENDPOINTS = process.env.OVERPASS_URL
+  ? [process.env.OVERPASS_URL]
+  : [
+      "https://overpass-api.de/api/interpreter",
+      "https://overpass.private.coffee/api/interpreter",
+      "https://maps.mail.ru/osm/tools/overpass/api/interpreter",
+    ];
+
+async function query() {
+  for (let attempt = 0; attempt < 3; attempt++) {
+    for (const endpoint of ENDPOINTS) {
+      try {
+        const res = await fetch(endpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded", "User-Agent": "land-map ingest" },
+          body: new URLSearchParams({ data: QUERY }),
+        });
+        if (res.ok) return await res.json();
+        console.warn(`${endpoint}: HTTP ${res.status}`);
+      } catch (err) {
+        console.warn(`${endpoint}: ${err.message}`);
+      }
+    }
+    await new Promise((r) => setTimeout(r, 15_000 * (attempt + 1)));
+  }
+  console.error("all Overpass endpoints failed");
   process.exit(1);
 }
-const { elements } = await res.json();
+
+const { elements } = await query();
 
 const round = (n) => Math.round(n * 1e6) / 1e6;
 const features = [];

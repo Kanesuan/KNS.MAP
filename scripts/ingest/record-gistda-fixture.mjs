@@ -2,7 +2,7 @@
 // raw response as a test fixture, so the parser is written against real data
 // (docs/BRIEF.md section 5). The API key is never written to the fixture.
 // Usage: node scripts/ingest/record-gistda-fixture.mjs [lat] [lon]
-import { writeFileSync } from "node:fs";
+import { mkdirSync, writeFileSync } from "node:fs";
 import { loadEnvLocal } from "./env.mjs";
 
 loadEnvLocal();
@@ -22,6 +22,7 @@ for (const version of ["v1.1", "v1.0"]) {
   console.log(`${version}: HTTP ${res.status}, ${text.length} bytes`);
   if (!res.ok) continue;
   const body = JSON.parse(text.split(key).join("<redacted>"));
+  mkdirSync("tests/fixtures", { recursive: true });
   const out = `tests/fixtures/gistda-flood-recurrence.${version}.json`;
   writeFileSync(
     out,
