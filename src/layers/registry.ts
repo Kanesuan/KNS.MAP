@@ -117,10 +117,10 @@ export const LAYERS: LayerConfig[] = [
       url: "https://api-gateway.gistda.or.th",
       license: "Open Data Common",
       dataDate: "2023-12-31",
-      commercialUse: "unverified",
+      commercialUse: "yes",
     },
     inspect: { mode: "contains", describe: describeFloodRecurrence },
-    status: "sample",
+    status: "live",
     coverage: ["10", "12", "13", "11", "73", "74"],
   },
   {
