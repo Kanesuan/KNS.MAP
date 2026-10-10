@@ -47,7 +47,7 @@ export function MapView() {
           minZoom: MIN_ZOOM,
           maxZoom: MAX_ZOOM,
           maxBounds: MAX_BOUNDS,
-          attributionControl: { compact: true },
+          attributionControl: { compact: true, customAttribution: "© OpenStreetMap contributors" },
           dragRotate: false,
           pitchWithRotate: false,
         });

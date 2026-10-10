@@ -1,5 +1,5 @@
 {
   "run": 3,
-  "gistdaFixture": true,
-  "osmRail": true
+  "gistdaFixture": false,
+  "osmRail": false
 }

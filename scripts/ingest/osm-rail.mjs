@@ -33,7 +33,10 @@ async function query() {
       try {
         const res = await fetch(endpoint, {
           method: "POST",
-          headers: { "Content-Type": "application/x-www-form-urlencoded", "User-Agent": "land-map ingest" },
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            "User-Agent": "land-map ingest",
+          },
           body: new URLSearchParams({ data: QUERY }),
         });
         if (res.ok) return await res.json();
@@ -59,10 +62,24 @@ for (const el of elements) {
   if (el.type === "way" && el.geometry?.length > 1) {
     features.push({
       type: "Feature",
-      properties: { kind: "line", line: tags.line ?? tags.name ?? null, railway: tags.railway, osmId: `w${el.id}` },
-      geometry: { type: "LineString", coordinates: el.geometry.map((g) => [round(g.lon), round(g.lat)]) },
+      properties: {
+        kind: "line",
+        line: tags.line ?? tags.name ?? null,
+        railway: tags.railway,
+        osmId: `w${el.id}`,
+      },
+      geometry: {
+        type: "LineString",
+        coordinates: el.geometry.map((g) => [round(g.lon), round(g.lat)]),
+      },
     });
-  } else if (el.type === "node" && name && Number.isFinite(el.lat) && Number.isFinite(el.lon) && !seenStations.has(el.id)) {
+  } else if (
+    el.type === "node" &&
+    name &&
+    Number.isFinite(el.lat) &&
+    Number.isFinite(el.lon) &&
+    !seenStations.has(el.id)
+  ) {
     seenStations.add(el.id);
     features.push({
       type: "Feature",
@@ -76,5 +93,8 @@ const out = "public/data/rail-transit.geojson";
 const json = JSON.stringify({ type: "FeatureCollection", features });
 writeFileSync(out, `${json}\n`);
 const lines = features.filter((f) => f.properties.kind === "line").length;
-console.log(`saved ${out}: ${lines} line segments, ${seenStations.size} stations, ${(json.length / 1e6).toFixed(2)} MB`);
-if (json.length > 2e6) console.warn("over 2 MB: convert to PMTiles (scripts/ingest/to-pmtiles.mjs)");
+console.log(
+  `saved ${out}: ${lines} line segments, ${seenStations.size} stations, ${(json.length / 1e6).toFixed(2)} MB`,
+);
+if (json.length > 2e6)
+  console.warn("over 2 MB: convert to PMTiles (scripts/ingest/to-pmtiles.mjs)");

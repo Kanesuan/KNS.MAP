@@ -53,13 +53,16 @@ test("visible layers survive a reload", async ({ page }) => {
   await expect.poll(() => layersInUrl(page)).toBe("rail-transit,admin-boundary");
 });
 
-test("every layer has a sample badge and a '?' with its source and data date", async ({ page }) => {
+test("sample layers are labelled and every layer has a '?' with source and date", async ({
+  page,
+}) => {
   await openMap(page);
   await openPanel(page);
   const rows = page.locator('[data-testid^="layer-row-"]');
   await expect(rows).toHaveCount(7);
+  await expect(page.getByTestId("layer-row-rail-transit")).not.toContainText("ข้อมูลตัวอย่าง");
+  await expect(page.getByTestId("layer-row-bkk-zoning-current")).toContainText("ข้อมูลตัวอย่าง");
   for (const row of await rows.all()) {
-    await expect(row).toContainText("ข้อมูลตัวอย่าง");
     const info = row.getByRole("button", { name: /^อ่านเพิ่มเติมเกี่ยวกับ/ });
     await expect(info).toHaveAttribute("aria-expanded", "false");
     await info.click();
