@@ -1,8 +1,13 @@
 {
-  "run": 7,
+  "run": 8,
   "gistdaFixture": false,
   "osmRail": false,
   "hdxAdmin": false,
   "bmaPlan": false,
-  "discover": []
+  "discover": [
+    "https://kns-map-git-claude-land-map-platform-ban-66b51d-kanesuansa-4873.vercel.app/",
+    "https://kns-map-git-claude-land-map-platform-ban-66b51d-kanesuansa-4873.vercel.app/api/inspect?layer=flood-recurrence&lat=13.86&lng=100.83",
+    "https://kns-map-git-claude-land-map-platform-ban-66b51d-kanesuansa-4873.vercel.app/data/bkk-zoning-current.geojson"
+  ],
+  "lighthouse": ["https://kns-map-git-claude-land-map-platform-ban-66b51d-kanesuansa-4873.vercel.app/"]
 }

@@ -51,6 +51,12 @@ jobs:
           urls=$(node -p "(require('./scripts/ingest/requests.json').discover || []).join(' ')")
           if [ -z "$urls" ]; then echo "skipped"; exit 0; fi
           node scripts/ingest/discover.mjs $urls
+      - name: Lighthouse on deployed URLs
+        run: |
+          urls=$(node -p "(require('./scripts/ingest/requests.json').lighthouse || []).join(' ')")
+          if [ -z "$urls" ]; then echo "skipped"; exit 0; fi
+          npm ci --no-audit --no-fund > /dev/null
+          for u in $urls; do echo "== $u"; CHROME_PATH=$(which google-chrome) node scripts/lighthouse.mjs "$u" 3 || true; done
       - name: Commit outputs
         run: |
           git config user.name "github-actions[bot]"
