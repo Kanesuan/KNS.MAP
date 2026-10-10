@@ -51,6 +51,16 @@ If Playwright cannot download a browser, point it at a local Chromium with
   `public/data/*.sample.geojson`.
 - Visible layers are kept in the URL as `?l=id1,id2` (missing = defaults, empty = none).
 
+## Point inspection
+
+- Tapping the map pins the point and opens one card per layer (visible layers first).
+- GeoJSON layers are answered in the browser from the static data (`src/lib/geo.ts`);
+  each layer's sentence comes from its `inspect.describe` in `src/layers/describe/`.
+- `"api"` layers go through `GET /api/inspect?layer=&lat=&lng=`, which calls the
+  provider server-side (`src/lib/server/inspectors.ts`) so keys never reach the browser.
+- `npm run check:secrets` (after build, also in CI) fails if `GISTDA_API_KEY` appears in
+  `.next/static`.
+
 ## Hosting
 
 Vercel with a preview per PR. Connect this GitHub repo in the Vercel dashboard;

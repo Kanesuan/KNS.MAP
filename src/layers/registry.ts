@@ -1,4 +1,11 @@
 import type { ExpressionSpecification } from "maplibre-gl";
+import {
+  describeAdmin,
+  describePlannedRoad,
+  describeRailStation,
+  describeSubsidence,
+  describeZoning,
+} from "./describe";
 import type { LayerConfig } from "./types";
 
 // Standard land-use colours of the Bangkok comprehensive plan.
@@ -73,6 +80,7 @@ export const LAYERS: LayerConfig[] = [
     defaultOpacity: 0.6,
     exclusiveGroup: "bkk-zoning",
     attribution: BMA_ZONING,
+    inspect: { mode: "contains", describe: describeZoning },
     status: "sample",
     coverage: ["10"],
   },
@@ -89,6 +97,7 @@ export const LAYERS: LayerConfig[] = [
     exclusiveGroup: "bkk-zoning",
     badge: "draft",
     attribution: BMA_ZONING,
+    inspect: { mode: "contains", describe: describeZoning },
     status: "sample",
     coverage: ["10"],
   },
@@ -149,6 +158,7 @@ export const LAYERS: LayerConfig[] = [
       dataDate: "2026-10-10",
       commercialUse: "unverified",
     },
+    inspect: { mode: "contains", describe: describeSubsidence },
     status: "sample",
     coverage: ["10"],
   },
@@ -176,6 +186,7 @@ export const LAYERS: LayerConfig[] = [
     defaultVisible: false,
     defaultOpacity: 0.9,
     attribution: BMA_ZONING,
+    inspect: { mode: "nearest", maxDistanceM: 150, describe: describePlannedRoad },
     status: "sample",
     coverage: ["10"],
   },
@@ -241,6 +252,12 @@ export const LAYERS: LayerConfig[] = [
       dataDate: "2026-10-10",
       commercialUse: "yes",
     },
+    inspect: {
+      mode: "nearest",
+      maxDistanceM: 3000,
+      filter: (p) => p.kind === "station",
+      describe: describeRailStation,
+    },
     status: "sample",
     coverage: ["10"],
   },
@@ -273,6 +290,7 @@ export const LAYERS: LayerConfig[] = [
       dataDate: "2026-10-10",
       commercialUse: "unverified",
     },
+    inspect: { mode: "contains", describe: describeAdmin },
     status: "sample",
     coverage: ["10"],
   },

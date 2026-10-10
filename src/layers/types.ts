@@ -31,7 +31,12 @@ export type LayerConfig = {
   /** The "sample" badge comes from `status`; this is for extra labels. */
   badge?: "draft";
   inspect?: {
-    describe: (props: Record<string, unknown>) => string | null;
+    /** "contains": the polygon under the point. "nearest": closest feature within maxDistanceM. */
+    mode: "contains" | "nearest";
+    maxDistanceM?: number;
+    /** Only features passing this test are considered (e.g. stations, not lines). */
+    filter?: (props: Record<string, unknown>) => boolean;
+    describe: (props: Record<string, unknown>, ctx: { distanceM: number }) => string | null;
   };
   attribution: {
     org: string;

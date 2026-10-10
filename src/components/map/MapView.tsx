@@ -8,6 +8,7 @@ import { basemapStyleUrl, loadBasemapStyle } from "@/lib/basemap";
 import { MAX_BOUNDS, MAX_ZOOM, MIN_ZOOM, REGION_BOUNDS } from "@/lib/region";
 import { replaceSearch } from "@/lib/url";
 import { parseViewState, serializeViewState } from "@/lib/url-state";
+import { useInspectStore } from "@/store/inspect-store";
 import { useLayerStore } from "@/store/layer-store";
 import { useMapStore } from "@/store/map-store";
 import { MapControls } from "./MapControls";
@@ -23,6 +24,8 @@ export function MapView() {
   const flyTarget = useMapStore((s) => s.flyTarget);
   const markerRef = useRef<Marker | null>(null);
   const [styleLoaded, setStyleLoaded] = useState(false);
+  const inspectPoint = useInspectStore((s) => s.point);
+  const pinRef = useRef<Marker | null>(null);
   const layersReady = useLayerStore((s) => s.initialized);
 
   useEffect(() => {
@@ -59,6 +62,9 @@ export function MapView() {
           );
         };
         m.on("moveend", syncUrl);
+        m.on("click", (e) => {
+          useInspectStore.getState().inspect({ lat: e.lngLat.lat, lng: e.lngLat.lng });
+        });
         m.once("load", () => {
           syncUrl();
           setStyleLoaded(true);
@@ -90,6 +96,16 @@ export function MapView() {
       ? new Marker({ color: "#2563eb" }).setLngLat([flyTarget.lng, flyTarget.lat]).addTo(map)
       : null;
   }, [map, flyTarget]);
+
+  useEffect(() => {
+    pinRef.current?.remove();
+    pinRef.current =
+      map && inspectPoint
+        ? new Marker({ color: "#dc2626" })
+            .setLngLat([inspectPoint.lng, inspectPoint.lat])
+            .addTo(map)
+        : null;
+  }, [map, inspectPoint]);
 
   const retry = useCallback(() => {
     setFailed(false);

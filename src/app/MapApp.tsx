@@ -2,6 +2,8 @@
 
 import dynamic from "next/dynamic";
 import { useEffect } from "react";
+import { InspectPanel } from "@/components/inspect/InspectPanel";
+import { TapHint } from "@/components/inspect/TapHint";
 import { LayerPanel } from "@/components/layers/LayerPanel";
 import { SearchBox } from "@/components/search/SearchBox";
 import { useLayerStore } from "@/store/layer-store";
@@ -23,6 +25,8 @@ export function MapApp() {
       <MapView />
       <SearchBox />
       <LayerPanel />
+      <InspectPanel />
+      <TapHint />
     </main>
   );
 }

@@ -1,0 +1,55 @@
+import { describe, expect, it } from "vitest";
+import {
+  describeAdmin,
+  describePlannedRoad,
+  describeRailStation,
+  describeSubsidence,
+  describeZoning,
+  formatDistance,
+} from "@/layers/describe";
+
+describe("describe functions", () => {
+  it("zoning", () => {
+    expect(describeZoning({ zone: "ย.3", category: "residential_low" })).toBe(
+      "ที่ดินประเภทที่อยู่อาศัยหนาแน่นน้อย (ย.3)",
+    );
+    expect(describeZoning({ zone: "พ.3", category: "commercial" })).toBe(
+      "ที่ดินประเภทพาณิชยกรรม (พ.3)",
+    );
+    expect(describeZoning({ zone: "x", category: "unknown" })).toBeNull();
+    expect(describeZoning({})).toBeNull();
+  });
+
+  it("planned road", () => {
+    expect(describePlannedRoad({ code: "ก1", widthM: 16 }, { distanceM: 42.4 })).toBe(
+      "มีแนวถนนโครงการ ก1 กว้าง 16 เมตร ห่างจากจุดนี้ประมาณ 42 เมตร",
+    );
+    expect(describePlannedRoad({ code: "ก1" }, { distanceM: 1 })).toBeNull();
+  });
+
+  it("subsidence", () => {
+    expect(describeSubsidence({ rateClass: "10to20" })).toBe("พื้นดินทรุดตัว 10–20 มิลลิเมตรต่อปี");
+    expect(describeSubsidence({ rateClass: "huge" })).toBeNull();
+  });
+
+  it("rail station", () => {
+    expect(describeRailStation({ name: "สถานีตัวอย่าง ก1" }, { distanceM: 853 })).toBe(
+      "สถานีใกล้ที่สุดคือสถานีตัวอย่าง ก1 ห่างประมาณ 850 เมตร",
+    );
+    expect(describeRailStation({}, { distanceM: 1 })).toBeNull();
+  });
+
+  it("admin boundary", () => {
+    expect(describeAdmin({ name: "เขตตัวอย่าง 1", province: "กรุงเทพมหานคร" })).toBe(
+      "เขตตัวอย่าง 1 กรุงเทพมหานคร",
+    );
+    expect(describeAdmin({ name: "เขตตัวอย่าง 1" })).toBe("เขตตัวอย่าง 1");
+    expect(describeAdmin({ name: 3 })).toBeNull();
+  });
+
+  it("formats distances", () => {
+    expect(formatDistance(3)).toBe("10 เมตร");
+    expect(formatDistance(999)).toBe("1000 เมตร");
+    expect(formatDistance(1234)).toBe("1.2 กิโลเมตร");
+  });
+});

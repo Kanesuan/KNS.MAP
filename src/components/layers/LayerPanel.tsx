@@ -5,6 +5,7 @@ import { BottomSheet } from "@/components/ui/BottomSheet";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { t } from "@/i18n/th";
 import { useLayerStore } from "@/store/layer-store";
+import { useUiStore } from "@/store/ui-store";
 import { LayerList } from "./LayerList";
 
 function LayersIcon() {
@@ -27,24 +28,22 @@ function LayersIcon() {
 export function LayerPanel() {
   const isMobile = useIsMobile();
   const initialized = useLayerStore((s) => s.initialized);
-  const [sheetOpen, setSheetOpen] = useState(false);
+  const sheet = useUiStore((s) => s.sheet);
+  const setSheet = useUiStore((s) => s.setSheet);
   const [collapsed, setCollapsed] = useState(false);
 
   if (!initialized) return null;
 
   if (isMobile) {
-    return sheetOpen ? (
-      <BottomSheet
-        title={t("panel.title")}
-        onClose={() => setSheetOpen(false)}
-        testId="layer-sheet"
-      >
+    if (sheet === "inspect") return null;
+    return sheet === "layers" ? (
+      <BottomSheet title={t("panel.title")} onClose={() => setSheet(null)} testId="layer-sheet">
         <LayerList />
       </BottomSheet>
     ) : (
       <button
         type="button"
-        onClick={() => setSheetOpen(true)}
+        onClick={() => setSheet("layers")}
         aria-label={t("panel.open")}
         className="fixed bottom-8 left-3 z-20 flex min-h-11 items-center gap-2 rounded-xl bg-white px-4 text-base font-medium shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
       >

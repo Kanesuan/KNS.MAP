@@ -82,6 +82,44 @@ export const th = {
       summary: "เส้นแบ่งจังหวัด เขต และอำเภอ",
     },
   },
+  inspect: {
+    title: "ข้อมูลของจุดนี้",
+    close: "ปิดผลของจุด",
+    hint: "แตะที่แผนที่เพื่อดูข้อมูลของจุดนั้น",
+    dismissHint: "ปิดคำแนะนำ",
+    noData: "ไม่มีข้อมูลในจุดนี้",
+    loading: "กำลังโหลด…",
+    failed: "โหลดไม่สำเร็จ",
+    notReady: "ยังไม่พร้อมใช้งาน",
+    retry: "ลองใหม่",
+    showOnMap: "ดูบนแผนที่",
+    shownOnMap: "แสดงบนแผนที่อยู่",
+    disclaimer:
+      "ข้อมูลเพื่อการตรวจสอบเบื้องต้น ไม่ใช่เอกสารทางกฎหมาย โปรดยืนยันกับหน่วยงานที่เกี่ยวข้องก่อนตัดสินใจ",
+  },
+  describe: {
+    zoning: "ที่ดินประเภท{category} ({zone})",
+    zoningCategory: {
+      residential_low: "ที่อยู่อาศัยหนาแน่นน้อย",
+      residential_medium: "ที่อยู่อาศัยหนาแน่นปานกลาง",
+      residential_high: "ที่อยู่อาศัยหนาแน่นมาก",
+      commercial: "พาณิชยกรรม",
+      industrial: "อุตสาหกรรม",
+      agriculture: "อนุรักษ์ชนบทและเกษตรกรรม",
+      institutional: "สถาบันราชการ สาธารณูปโภคและสาธารณูปการ",
+    },
+    plannedRoad: "มีแนวถนนโครงการ {code} กว้าง {width} เมตร ห่างจากจุดนี้ประมาณ {distance} เมตร",
+    subsidence: {
+      lt10: "พื้นดินทรุดตัวน้อยกว่า 10 มิลลิเมตรต่อปี",
+      "10to20": "พื้นดินทรุดตัว 10–20 มิลลิเมตรต่อปี",
+      "20to30": "พื้นดินทรุดตัว 20–30 มิลลิเมตรต่อปี",
+      gt30: "พื้นดินทรุดตัวมากกว่า 30 มิลลิเมตรต่อปี",
+    },
+    railStation: "สถานีใกล้ที่สุดคือ{name} ห่างประมาณ {distance}",
+    meters: "{n} เมตร",
+    kilometers: "{n} กิโลเมตร",
+    admin: "{name} {province}",
+  },
   legend: {
     residentialLow: "ที่อยู่อาศัยหนาแน่นน้อย (ย.1–ย.4)",
     residentialMedium: "ที่อยู่อาศัยหนาแน่นปานกลาง (ย.5–ย.7)",
@@ -117,6 +155,11 @@ export function t(key: MessageKey): string {
     node = (node as Record<string, unknown>)[part];
   }
   return typeof node === "string" ? node : key;
+}
+
+/** Fills `{name}` placeholders in a message. */
+export function format(key: MessageKey, vars: Record<string, string | number>): string {
+  return t(key).replace(/\{(\w+)\}/g, (m, name: string) => (name in vars ? String(vars[name]) : m));
 }
 
 export function hasMessage(key: string): boolean {
