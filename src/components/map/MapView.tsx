@@ -6,9 +6,12 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { th } from "@/i18n/th";
 import { basemapStyleUrl, loadBasemapStyle } from "@/lib/basemap";
 import { MAX_BOUNDS, MAX_ZOOM, MIN_ZOOM, REGION_BOUNDS } from "@/lib/region";
+import { replaceSearch } from "@/lib/url";
 import { parseViewState, serializeViewState } from "@/lib/url-state";
+import { useLayerStore } from "@/store/layer-store";
 import { useMapStore } from "@/store/map-store";
 import { MapControls } from "./MapControls";
+import { MapLayers } from "./MapLayers";
 
 setWorkerUrl(`/vendor/maplibre/maplibre-gl-worker.mjs?v=${getVersion()}`);
 
@@ -19,6 +22,8 @@ export function MapView() {
   const [attempt, setAttempt] = useState(0);
   const flyTarget = useMapStore((s) => s.flyTarget);
   const markerRef = useRef<Marker | null>(null);
+  const [styleLoaded, setStyleLoaded] = useState(false);
+  const layersReady = useLayerStore((s) => s.initialized);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -49,15 +54,14 @@ export function MapView() {
 
         const syncUrl = () => {
           const c = m.getCenter();
-          const next = serializeViewState(
-            { lat: c.lat, lng: c.lng, zoom: m.getZoom() },
-            window.location.search,
+          replaceSearch((search) =>
+            serializeViewState({ lat: c.lat, lng: c.lng, zoom: m.getZoom() }, search),
           );
-          window.history.replaceState(window.history.state, "", next + window.location.hash);
         };
         m.on("moveend", syncUrl);
         m.once("load", () => {
           syncUrl();
+          setStyleLoaded(true);
           container.dataset.loaded = "true";
         });
         setMap(m);
@@ -70,6 +74,7 @@ export function MapView() {
       cancelled = true;
       instance?.remove();
       setMap(null);
+      setStyleLoaded(false);
     };
   }, [attempt]);
 
@@ -101,6 +106,7 @@ export function MapView() {
         className="fixed inset-0 h-dvh w-screen bg-neutral-200"
       />
       {map && <MapControls map={map} />}
+      {map && styleLoaded && layersReady && <MapLayers map={map} />}
       {failed && (
         <div
           role="alert"

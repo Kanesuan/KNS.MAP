@@ -40,6 +40,7 @@ const iconProps = {
 
 export function MapControls({ map }: { map: MaplibreMap }) {
   const flyTo = useMapStore((s) => s.flyTo);
+  const sheetHeight = useMapStore((s) => s.sheetHeight);
   const [locate, setLocate] = useState<LocateState>("idle");
 
   const findMe = () => {
@@ -66,7 +67,14 @@ export function MapControls({ map }: { map: MaplibreMap }) {
         : null;
 
   return (
-    <div className="fixed right-3 bottom-8 z-10 flex flex-col items-end gap-2">
+    // Sit above the mobile bottom sheet; hide when the sheet leaves no room.
+    <div
+      className="fixed right-3 bottom-8 z-40 flex flex-col items-end gap-2 transition-[bottom] duration-200"
+      style={sheetHeight ? { bottom: sheetHeight + 12 } : undefined}
+      hidden={
+        sheetHeight > 0 && typeof window !== "undefined" && sheetHeight > window.innerHeight - 180
+      }
+    >
       {message && (
         <p role="status" className="max-w-56 rounded-lg bg-white px-3 py-2 text-base shadow">
           {message}

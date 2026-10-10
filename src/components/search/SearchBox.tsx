@@ -60,7 +60,7 @@ export function SearchBox() {
           : null;
 
   return (
-    <div className="fixed inset-x-0 top-0 z-20 p-2 md:top-3 md:left-3 md:right-auto md:w-80 md:p-0">
+    <div className="fixed inset-x-0 top-0 z-30 p-2 md:top-3 md:left-3 md:right-auto md:w-80 md:p-0">
       <form
         role="search"
         onSubmit={onSubmit}
