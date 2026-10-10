@@ -61,6 +61,23 @@ If Playwright cannot download a browser, point it at a local Chromium with
 - `npm run check:secrets` (after build, also in CI) fails if `GISTDA_API_KEY` appears in
   `.next/static`.
 
+## Data ingest
+
+Sources, licences and status: [docs/DATA_SOURCES.md](docs/DATA_SOURCES.md).
+
+| Script | Output |
+|---|---|
+| `node scripts/ingest/record-gistda-fixture.mjs` | One real GISTDA response in `tests/fixtures/` (key redacted) |
+| `node scripts/ingest/osm-rail.mjs` | `public/data/rail-transit.geojson` from OpenStreetMap |
+| `node scripts/ingest/arcgis-rest.mjs <layer-url> <out>` | GeoJSON (EPSG:4326) from an ArcGIS REST layer, paged; only after licence confirmation |
+| `node scripts/ingest/to-pmtiles.mjs <in> <out> <layer>` | PMTiles via tippecanoe, for files over 2 MB |
+
+## Usage events
+
+`src/lib/analytics.ts` records `layer_toggled`, `point_inspected` and `search_used`
+through one `track()` function; the default sink logs to the console. Swap it with
+`setAnalyticsSink()`.
+
 ## Hosting
 
 Vercel with a preview per PR. Connect this GitHub repo in the Vercel dashboard;

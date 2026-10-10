@@ -2,6 +2,7 @@
 
 import { useId, useState, type FormEvent } from "react";
 import { th } from "@/i18n/th";
+import { track } from "@/lib/analytics";
 import { parseLatLng } from "@/lib/coords";
 import type { GeocodeResult } from "@/lib/geocoder";
 import { useMapStore } from "@/store/map-store";
@@ -27,6 +28,7 @@ export function SearchBox() {
     if (!q) return;
     const coords = parseLatLng(q);
     if (coords) {
+      track({ name: "search_used", kind: "coordinates", resultCount: 1 });
       go({ ...coords, label: q });
       return;
     }
@@ -37,6 +39,7 @@ export function SearchBox() {
       const res = await fetch(`/api/geocode?q=${encodeURIComponent(q)}`);
       if (!res.ok) throw new Error(String(res.status));
       const body = (await res.json()) as { results: GeocodeResult[] };
+      track({ name: "search_used", kind: "place", resultCount: body.results.length });
       setResults(body.results);
       setStatus(body.results.length ? "idle" : "empty");
     } catch {
