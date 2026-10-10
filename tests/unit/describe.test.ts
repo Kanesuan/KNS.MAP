@@ -40,11 +40,14 @@ describe("describe functions", () => {
   });
 
   it("admin boundary", () => {
-    expect(describeAdmin({ name: "เขตตัวอย่าง 1", province: "กรุงเทพมหานคร" })).toBe(
-      "เขตตัวอย่าง 1 กรุงเทพมหานคร",
+    expect(describeAdmin({ name: "พระนคร", province: "กรุงเทพมหานคร" })).toBe(
+      "เขตพระนคร กรุงเทพมหานคร",
     );
-    expect(describeAdmin({ name: "เขตตัวอย่าง 1" })).toBe("เขตตัวอย่าง 1");
-    expect(describeAdmin({ name: 3 })).toBeNull();
+    expect(describeAdmin({ name: "เมืองนนทบุรี", province: "นนทบุรี" })).toBe(
+      "อำเภอเมืองนนทบุรี จังหวัดนนทบุรี",
+    );
+    expect(describeAdmin({ name: "พระนคร" })).toBeNull();
+    expect(describeAdmin({ name: 3, province: "x" })).toBeNull();
   });
 
   it("formats distances", () => {

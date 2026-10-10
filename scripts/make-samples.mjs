@@ -139,19 +139,11 @@ const subsidence = fc([
   poly(rect(100.47, 13.76, 100.57, 13.84), { rateClass: "lt10" }),
 ]);
 
-const admin = fc([
-  poly(rect(100.46, 13.7, 100.55, 13.775), { name: "เขตตัวอย่าง 1", province: "กรุงเทพมหานคร" }),
-  poly(rect(100.55, 13.7, 100.64, 13.775), { name: "เขตตัวอย่าง 2", province: "กรุงเทพมหานคร" }),
-  poly(rect(100.46, 13.775, 100.55, 13.85), { name: "เขตตัวอย่าง 3", province: "กรุงเทพมหานคร" }),
-  poly(rect(100.55, 13.775, 100.64, 13.85), { name: "เขตตัวอย่าง 4", province: "กรุงเทพมหานคร" }),
-]);
-
 const out = {
   "bkk-zoning-current.sample.geojson": zoning(CURRENT),
   "bkk-zoning-draft4.sample.geojson": zoning(DRAFT),
   "bkk-planned-roads.sample.geojson": plannedRoads,
   "subsidence.sample.geojson": subsidence,
-  "admin-boundary.sample.geojson": admin,
 };
 for (const [name, data] of Object.entries(out)) {
   writeFileSync(`public/data/${name}`, `${JSON.stringify(data)}\n`);

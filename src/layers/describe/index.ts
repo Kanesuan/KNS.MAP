@@ -46,8 +46,11 @@ export function describeRailStation(props: Props, ctx: Ctx): string | null {
 
 export function describeAdmin(props: Props): string | null {
   const name = str(props.name);
-  if (!name) return null;
-  return format("describe.admin", { name, province: str(props.province) ?? "" }).trim();
+  const province = str(props.province);
+  if (!name || !province) return null;
+  return province === "กรุงเทพมหานคร"
+    ? format("describe.adminBkk", { name })
+    : format("describe.admin", { name, province });
 }
 
 /** Expects the FloodRecurrence object returned by /api/inspect. */

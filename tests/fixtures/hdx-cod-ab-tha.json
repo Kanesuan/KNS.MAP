@@ -1,0 +1,30 @@
+{
+  "recordedAt": "2026-10-10T16:33:08.667Z",
+  "title": "Thailand - Subnational Administrative Boundaries",
+  "license_title": "Creative Commons Attribution for Intergovernmental Organisations (CC BY-IGO)",
+  "dataset_source": "Royal Thai Survey Department",
+  "last_modified": "2026-01-26T16:23:47.682305",
+  "dataset_date": "[2022-01-22T00:00:00 TO 2025-10-30T23:59:59]",
+  "resources": [
+    {
+      "name": "tha_admin_boundaries.gdb.zip",
+      "format": "Geodatabase",
+      "url": "https://data.humdata.org/dataset/d24bdc45-eb4c-4e3d-8b16-44db02667c27/resource/ccbf3740-0638-48ea-b612-cdb61ef5462c/download/tha_admin_boundaries.gdb.zip"
+    },
+    {
+      "name": "tha_admin_boundaries.shp.zip",
+      "format": "SHP",
+      "url": "https://data.humdata.org/dataset/d24bdc45-eb4c-4e3d-8b16-44db02667c27/resource/10dde461-b781-4904-9559-7deb3e960913/download/tha_admin_boundaries.shp.zip"
+    },
+    {
+      "name": "tha_admin_boundaries.geojson.zip",
+      "format": "GeoJSON",
+      "url": "https://data.humdata.org/dataset/d24bdc45-eb4c-4e3d-8b16-44db02667c27/resource/89a09f13-7b83-458a-9531-4f2418613065/download/tha_admin_boundaries.geojson.zip"
+    },
+    {
+      "name": "tha_admin_boundaries.xlsx",
+      "format": "XLSX",
+      "url": "https://data.humdata.org/dataset/d24bdc45-eb4c-4e3d-8b16-44db02667c27/resource/a925b917-01ae-48c4-9279-7efe680a6b11/download/tha_admin_boundaries.xlsx"
+    }
+  ]
+}
