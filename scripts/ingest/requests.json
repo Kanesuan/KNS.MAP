@@ -1,12 +1,9 @@
 {
-  "run": 9,
+  "run": 10,
   "gistdaFixture": false,
   "osmRail": false,
   "hdxAdmin": false,
   "bmaPlan": false,
-  "discover": [
-    "https://kns-map.vercel.app/api/inspect?layer=flood-recurrence&lat=13.86&lng=100.83",
-    "https://kns-map-kanesuansa-4873.vercel.app/api/inspect?layer=flood-recurrence&lat=13.86&lng=100.83"
-  ],
-  "lighthouse": []
+  "discover": [],
+  "lighthouse": ["https://kns-map.vercel.app/"]
 }
