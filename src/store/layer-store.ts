@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { track } from "@/lib/analytics";
 import { enforceExclusive, parseVisibleLayers } from "@/lib/layer-url";
 import { LAYERS } from "@/layers/registry";
 
@@ -28,7 +29,8 @@ export const useLayerStore = create<LayerStore>((set) => ({
   reloadToken: {},
   initFromUrl: (search) => set({ initialized: true, visible: parseVisibleLayers(search, LAYERS) }),
   setVisible: (ids) => set({ visible: enforceExclusive(ids, LAYERS) }),
-  toggle: (id, on) =>
+  toggle: (id, on) => {
+    track({ name: "layer_toggled", layerId: id, on });
     set((s) => {
       if (!on) return { visible: s.visible.filter((v) => v !== id) };
       const group = LAYERS.find((l) => l.id === id)?.exclusiveGroup;
@@ -36,7 +38,8 @@ export const useLayerStore = create<LayerStore>((set) => ({
         ? s.visible.filter((v) => LAYERS.find((l) => l.id === v)?.exclusiveGroup !== group)
         : s.visible;
       return { visible: enforceExclusive([...kept, id], LAYERS) };
-    }),
+    });
+  },
   setOpacity: (id, value) => set((s) => ({ opacity: { ...s.opacity, [id]: value } })),
   setLoad: (id, state) => set((s) => ({ load: { ...s.load, [id]: state } })),
   retry: (id) =>
