@@ -23,7 +23,7 @@ run() {
   node scripts/lighthouse.mjs "http://localhost:$port$path" 3 || true
   kill "$pid"; wait "$pid" 2>/dev/null
 }
-run "current"            ""                                "/"
-run "no-thai-font-faces" "NEXT_PUBLIC_THAI_FONT_FACES=off" "/"
-run "no-overlays"        ""                                "/?l="
-run "no-font-no-overlay" "NEXT_PUBLIC_THAI_FONT_FACES=off" "/?l="
+run "liberty (current)"  ""                                                                   "/"
+run "liberty-lite"       "NEXT_PUBLIC_BASEMAP_LITE=on"                                        "/"
+run "positron"           "NEXT_PUBLIC_BASEMAP_STYLE_URL=https://tiles.openfreemap.org/styles/positron" "/"
+run "positron-lite"      "NEXT_PUBLIC_BASEMAP_STYLE_URL=https://tiles.openfreemap.org/styles/positron NEXT_PUBLIC_BASEMAP_LITE=on" "/"
