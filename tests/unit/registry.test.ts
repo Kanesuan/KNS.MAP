@@ -32,8 +32,29 @@ describe("layer registry", () => {
   it("fails a live layer whose licence is not confirmed", () => {
     const errors = validateRegistry(
       variant({ status: "live", source: { kind: "geojson", url: "/data/subsidence.geojson" } }),
+      "commercial",
     );
     expect(errors.join("\n")).toMatch(/live.*commercialUse is "unverified"/);
+  });
+
+  it("in non-commercial mode, fails only unverified licences", () => {
+    const live = {
+      status: "live" as const,
+      source: { kind: "geojson" as const, url: "/data/s.geojson" },
+    };
+    expect(validateRegistry(variant(live), "non-commercial").join("\n")).toMatch(/unverified/);
+    expect(
+      validateRegistry(
+        variant({ ...live, attribution: { ...base.attribution, commercialUse: "no" } }),
+        "non-commercial",
+      ),
+    ).toEqual([]);
+    expect(
+      validateRegistry(
+        variant({ ...live, attribution: { ...base.attribution, commercialUse: "no" } }),
+        "commercial",
+      ).join("\n"),
+    ).toMatch(/commercialUse is "no"/);
   });
 
   it("accepts a live layer with commercial use confirmed", () => {

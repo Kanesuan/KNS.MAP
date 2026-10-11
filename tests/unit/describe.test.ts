@@ -10,6 +10,12 @@ import {
 
 describe("describe functions", () => {
   it("zoning", () => {
+    expect(describeZoning({ zone: "อ.3", category: "warehouse" })).toBe(
+      "ที่ดินประเภทคลังสินค้า (อ.3)",
+    );
+    expect(describeZoning({ zone: "ศ.1", category: "conservation" })).toBe(
+      "ที่ดินประเภทอนุรักษ์เพื่อส่งเสริมเอกลักษณ์ศิลปวัฒนธรรมไทย (ศ.1)",
+    );
     expect(describeZoning({ zone: "ย.3", category: "residential_low" })).toBe(
       "ที่ดินประเภทที่อยู่อาศัยหนาแน่นน้อย (ย.3)",
     );
@@ -21,8 +27,11 @@ describe("describe functions", () => {
   });
 
   it("planned road", () => {
-    expect(describePlannedRoad({ code: "ก1", widthM: 16 }, { distanceM: 42.4 })).toBe(
-      "มีแนวถนนโครงการ ก1 กว้าง 16 เมตร ห่างจากจุดนี้ประมาณ 42 เมตร",
+    expect(describePlannedRoad({ code: "ก", widthM: 12, name: "ก5" }, { distanceM: 42.4 })).toBe(
+      "มีแนวถนนโครงการ ก5 เขตทางกว้าง 12 เมตร ห่างจากจุดนี้ประมาณ 42 เมตร",
+    );
+    expect(describePlannedRoad({ code: "ข", widthM: 16 }, { distanceM: 10 })).toBe(
+      "มีแนวถนนโครงการ ข เขตทางกว้าง 16 เมตร ห่างจากจุดนี้ประมาณ 10 เมตร",
     );
     expect(describePlannedRoad({ code: "ก1" }, { distanceM: 1 })).toBeNull();
   });

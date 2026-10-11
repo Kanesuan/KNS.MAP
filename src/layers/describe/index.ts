@@ -26,7 +26,8 @@ export function describeZoning(props: Props): string | null {
 }
 
 export function describePlannedRoad(props: Props, ctx: Ctx): string | null {
-  const code = str(props.code);
+  // The plan names each road by its project code (e.g. "ก5"); fall back to the width class.
+  const code = str(props.name) ?? str(props.code);
   const width = num(props.widthM);
   if (!code || width === null) return null;
   return format("describe.plannedRoad", { code, width, distance: Math.round(ctx.distanceM) });

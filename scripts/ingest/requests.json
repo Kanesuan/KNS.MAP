@@ -1,6 +1,9 @@
 {
-  "run": 5,
+  "run": 10,
   "gistdaFixture": false,
   "osmRail": false,
-  "hdxAdmin": false
+  "hdxAdmin": false,
+  "bmaPlan": false,
+  "discover": [],
+  "lighthouse": ["https://kns-map.vercel.app/"]
 }

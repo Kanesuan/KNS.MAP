@@ -11,13 +11,15 @@ import type { LayerConfig } from "./types";
 
 // Standard land-use colours of the Bangkok comprehensive plan.
 const ZONING_COLORS = {
-  residential_low: "#f7e36b",
-  residential_medium: "#f4a340",
-  residential_high: "#a0522d",
-  commercial: "#e03c31",
-  industrial: "#8e44ad",
-  agriculture: "#6dbe45",
-  institutional: "#2e6fd8",
+  residential_low: "#ffff00",
+  residential_medium: "#ff9830",
+  residential_high: "#b05800",
+  commercial: "#ff2121",
+  industrial: "#b361ff",
+  warehouse: "#ffb0ff",
+  agriculture: "#008000",
+  conservation: "#ffddd1",
+  institutional: "#3a6fd8",
 } as const;
 
 const zoningFill: ExpressionSpecification = [
@@ -33,7 +35,9 @@ const zoningLegend: LayerConfig["legend"] = [
   { color: ZONING_COLORS.residential_high, label: "legend.residentialHigh" },
   { color: ZONING_COLORS.commercial, label: "legend.commercial" },
   { color: ZONING_COLORS.industrial, label: "legend.industrial" },
+  { color: ZONING_COLORS.warehouse, label: "legend.warehouse" },
   { color: ZONING_COLORS.agriculture, label: "legend.agriculture" },
+  { color: ZONING_COLORS.conservation, label: "legend.conservation" },
   { color: ZONING_COLORS.institutional, label: "legend.institutional" },
 ];
 
@@ -51,6 +55,18 @@ const zoningStyle = (id: string): LayerConfig["style"] => [
     paint: { "line-color": "#ffffff", "line-width": 0.8, "line-opacity": 0.8 },
   },
 ];
+
+// Comprehensive plan 2556 from the BMA's public map service. The plan is enacted
+// as a ministerial regulation, which the Copyright Act B.E. 2537 s.7 excludes from
+// copyright; the owner confirmed non-commercial use on 2026-10-10.
+const BMA_PLAN_2556 = {
+  org: "สำนักการวางผังและพัฒนาเมือง กรุงเทพมหานคร",
+  url: "http://3d-cpd.bangkok.go.th/ArcGIS/rest/services/DOL/LupDolWms/MapServer",
+  license:
+    "ผังเมืองรวมตามกฎกระทรวง พ.ศ. 2556 (ไม่มีลิขสิทธิ์ตาม พ.ร.บ.ลิขสิทธิ์ ม.7) ใช้โดยไม่แสวงหากำไร",
+  dataDate: "2013-05-16",
+  commercialUse: "no",
+} as const;
 
 const BMA_ZONING = {
   org: "สำนักการวางผังและพัฒนาเมือง กรุงเทพมหานคร",
@@ -74,15 +90,15 @@ export const LAYERS: LayerConfig[] = [
     group: "zoning",
     name: "layers.bkk-zoning-current.name",
     summary: "layers.bkk-zoning-current.summary",
-    source: { kind: "geojson", url: "/data/bkk-zoning-current.sample.geojson" },
+    source: { kind: "geojson", url: "/data/bkk-zoning-current.geojson" },
     style: zoningStyle("bkk-zoning-current"),
     legend: zoningLegend,
     defaultVisible: true,
     defaultOpacity: 0.6,
     exclusiveGroup: "bkk-zoning",
-    attribution: BMA_ZONING,
+    attribution: BMA_PLAN_2556,
     inspect: { mode: "contains", describe: describeZoning },
-    status: "sample",
+    status: "live",
     coverage: ["10"],
   },
   {
@@ -169,7 +185,7 @@ export const LAYERS: LayerConfig[] = [
     group: "infrastructure",
     name: "layers.bkk-planned-roads.name",
     summary: "layers.bkk-planned-roads.summary",
-    source: { kind: "geojson", url: "/data/bkk-planned-roads.sample.geojson" },
+    source: { kind: "geojson", url: "/data/bkk-planned-roads.geojson" },
     style: [
       {
         id: "bkk-planned-roads-line",
@@ -178,7 +194,16 @@ export const LAYERS: LayerConfig[] = [
         layout: { "line-cap": "round" },
         paint: {
           "line-color": "#d6336c",
-          "line-width": ["interpolate", ["linear"], ["zoom"], 10, 2, 16, 8],
+          // Wider right of way, wider line.
+          "line-width": [
+            "interpolate",
+            ["linear"],
+            ["zoom"],
+            10,
+            ["interpolate", ["linear"], ["get", "widthM"], 12, 1, 60, 3],
+            16,
+            ["interpolate", ["linear"], ["get", "widthM"], 12, 4, 60, 12],
+          ],
           "line-dasharray": [2, 1],
           "line-opacity": 1,
         },
@@ -187,9 +212,9 @@ export const LAYERS: LayerConfig[] = [
     legend: [{ color: "#d6336c", label: "legend.plannedRoad", shape: "line" }],
     defaultVisible: false,
     defaultOpacity: 0.9,
-    attribution: BMA_ZONING,
+    attribution: BMA_PLAN_2556,
     inspect: { mode: "nearest", maxDistanceM: 150, describe: describePlannedRoad },
-    status: "sample",
+    status: "live",
     coverage: ["10"],
   },
   {

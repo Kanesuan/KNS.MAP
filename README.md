@@ -87,7 +87,7 @@ through one `track()` function; the default sink logs to the console. Swap it wi
    - `NEXT_PUBLIC_BASEMAP_STYLE_URL`: optional, defaults to OpenFreeMap Liberty.
 4. Deploy. Every PR then gets its own preview URL.
 
-The Hobby plan is for non-commercial use; a commercial launch needs Vercel Pro or another
+The project is non-commercial (`src/layers/project.ts`), which fits the Hobby plan. A commercial launch would need Vercel Pro or another
 Next.js host (docs/BRIEF.md section 9).
 
 ## Acceptance checks on the deployed URL

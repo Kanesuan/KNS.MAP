@@ -1,5 +1,6 @@
 // Fails (exit 1) when the layer registry is invalid, including any "live"
 // layer whose licence is not confirmed for commercial use. Runs before build.
+import { PROJECT_USE } from "../src/layers/project";
 import { LAYERS } from "../src/layers/registry";
 import { validateRegistry } from "../src/layers/validate";
 
@@ -11,5 +12,5 @@ if (errors.length > 0) {
 }
 const live = LAYERS.filter((l) => l.status === "live").length;
 console.log(
-  `check:layers: ${LAYERS.length} layers OK (${live} live, ${LAYERS.length - live} sample)`,
+  `check:layers: ${LAYERS.length} layers OK (${live} live, ${LAYERS.length - live} sample, ${PROJECT_USE})`,
 );
