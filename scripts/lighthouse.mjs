@@ -37,7 +37,7 @@ for (let i = 0; i < runs; i++) {
   );
   results.push(s);
   console.log(
-    `run ${i + 1}: ${JSON.stringify(s)} TBT ${r.audits["total-blocking-time"].displayValue}`,
+    `run ${i + 1}: ${JSON.stringify(s)} FCP ${r.audits["first-contentful-paint"].displayValue} LCP ${r.audits["largest-contentful-paint"].displayValue} TBT ${r.audits["total-blocking-time"].displayValue} SI ${r.audits["speed-index"].displayValue}`,
   );
 }
 const median = (k) =>

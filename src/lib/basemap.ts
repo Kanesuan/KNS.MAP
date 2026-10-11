@@ -35,9 +35,24 @@ export function withThaiFontFaces(style: StyleSpecification, origin: string): St
   return { ...style, "font-faces": { ...faces, ...style["font-faces"] } };
 }
 
+/**
+ * Drops basemap layers that cost the most to draw and add little on a zoning
+ * map: 3D building extrusions and point-of-interest icons.
+ */
+export function liteLayers(layers: StyleSpecification["layers"]): StyleSpecification["layers"] {
+  return layers.filter((l) => {
+    if (l.type === "fill-extrusion") return false;
+    if (l.type === "symbol" && "source-layer" in l && l["source-layer"] === "poi") return false;
+    return true;
+  });
+}
+
 export async function loadBasemapStyle(url: string, origin: string): Promise<StyleSpecification> {
   const res = await fetch(url);
   if (!res.ok) throw new Error(`Basemap style ${res.status}`);
   const style = (await res.json()) as StyleSpecification;
+  if (process.env.NEXT_PUBLIC_BASEMAP_LITE === "on") style.layers = liteLayers(style.layers);
+  // Lab switch for performance comparisons; on unless explicitly turned off.
+  if (process.env.NEXT_PUBLIC_THAI_FONT_FACES === "off") return style;
   return withThaiFontFaces(style, origin);
 }
