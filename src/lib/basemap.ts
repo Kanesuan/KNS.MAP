@@ -39,5 +39,7 @@ export async function loadBasemapStyle(url: string, origin: string): Promise<Sty
   const res = await fetch(url);
   if (!res.ok) throw new Error(`Basemap style ${res.status}`);
   const style = (await res.json()) as StyleSpecification;
+  // Lab switch for performance comparisons; on unless explicitly turned off.
+  if (process.env.NEXT_PUBLIC_THAI_FONT_FACES === "off") return style;
   return withThaiFontFaces(style, origin);
 }

@@ -57,6 +57,11 @@ jobs:
           if [ -z "$urls" ]; then echo "skipped"; exit 0; fi
           npm ci --no-audit --no-fund > /dev/null
           for u in $urls; do echo "== $u"; CHROME_PATH=$(which google-chrome) node scripts/lighthouse.mjs "$u" 3 || true; done
+      - name: Performance lab (local build, real basemap)
+        run: |
+          if [ "$(node -p "require('./scripts/ingest/requests.json').perfLab")" != "true" ]; then echo "skipped"; exit 0; fi
+          npm ci --no-audit --no-fund > /dev/null
+          scripts/perf-lab.sh
       - name: Commit outputs
         run: |
           git config user.name "github-actions[bot]"
