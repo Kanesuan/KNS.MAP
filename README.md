@@ -94,6 +94,11 @@ Next.js host (docs/BRIEF.md section 9).
 
 - `npm run audit:lighthouse -- https://<your-domain>` runs Lighthouse three times on the
   mobile profile and checks the brief's targets (Performance ≥ 80, Accessibility ≥ 90).
-- In the build sandbox (no GPU, basemap fonts blocked) the lab score is about 70 for
-  Performance and 100 for Accessibility; most of the remaining blocking time is WebGL
-  drawn in software, so measure on the real URL.
+- `scripts/perf-lab.sh` (run on GitHub Actions with `"perfLab": true` in
+  `scripts/ingest/requests.json`) builds variants against the real basemap and measures
+  each. Lab switches: `NEXT_PUBLIC_THAI_FONT_FACES=off`, `NEXT_PUBLIC_BASEMAP_LITE=on`.
+- Findings (2026-10-11, mobile profile, median of 3): production 69; without Thai font
+  faces 68; without overlays 69; Liberty without 3D buildings/POIs 69; Positron 70.
+  Accessibility 100 and Best practices 100 throughout. The remaining 2–5 s of blocking
+  time is MapLibre drawing WebGL in software on a 4× throttled CPU, which no basemap or
+  overlay change moved. Real phones draw on the GPU.

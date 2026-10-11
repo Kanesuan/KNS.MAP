@@ -21,7 +21,7 @@ run() {
     echo "server is not serving build $build_id"; kill "$pid"; return
   fi
   node scripts/lighthouse.mjs "http://localhost:$port$path" 3 || true
-  kill "$pid"; wait "$pid" 2>/dev/null
+  kill "$pid"; wait "$pid" 2>/dev/null || true
 }
 run "liberty (current)"  ""                                                                   "/"
 run "liberty-lite"       "NEXT_PUBLIC_BASEMAP_LITE=on"                                        "/"
